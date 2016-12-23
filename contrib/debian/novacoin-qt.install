@@ -1,0 +1,5 @@
+YashCoin-qt usr/bin
+share/pixmaps/YashCoin32.xpm usr/share/pixmaps
+share/pixmaps/YashCoin80.xpm usr/share/pixmaps
+debian/YashCoin-qt.desktop usr/share/applications
+debian/YashCoin-qt.protocol usr/share/kde4/services/

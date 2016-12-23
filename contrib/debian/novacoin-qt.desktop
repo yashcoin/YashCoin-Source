@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=YashCoin
+Comment=YashCoin P2P Cryptocurrency
+Comment[ru]=YashCoin, P2P криптовалюта
+Comment[fr]=YashCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=YashCoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/YashCoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/YashCoin80.xpm
+MimeType=x-scheme-handler/YashCoin;
+Categories=Office;

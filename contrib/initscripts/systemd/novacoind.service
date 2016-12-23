@@ -1,0 +1,11 @@
+[Unit]
+Description=YashCoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=YashCoin
+ExecStart=/opt/YashCoin/YashCoind
+
+[Install]
+WantedBy=multi-user.target

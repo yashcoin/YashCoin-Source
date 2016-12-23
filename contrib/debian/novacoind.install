@@ -1,0 +1,2 @@
+debian/bin/YashCoind usr/bin
+src/YashCoind usr/lib/YashCoin

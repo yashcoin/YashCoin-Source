@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: YashCoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# YashCoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable YashCoin service.
+# YashCoin_config (path): Set to /usr/local/etc/YashCoin.conf by default.
+# YashCoin_user:  The user account YashCoin daemon runs as. It uses 'root' user by default.
+# YashCoin_group: The group account YashCoin daemon runs as. It uses 'wheel' group by default.
+# YashCoin_datadir (str): Default to "/var/db/YashCoin". Base data directory.
+
+. /etc/rc.subr
+
+name=YashCoin
+rcvar=YashCoin_enable
+
+: ${YashCoin_enable:=NO}
+: ${YashCoin_config=/usr/local/etc/YashCoin.conf}
+: ${YashCoin_datadir=/var/db/YashCoin}
+: ${YashCoin_user="root"}
+: ${YashCoin_group="wheel"}
+
+required_files=${YashCoin_config}
+command=/usr/local/bin/YashCoind
+YashCoin_chdir=${YashCoin_datadir}
+pidfile="${YashCoin_datadir}/YashCoind.pid"
+stop_cmd=YashCoin_stop
+command_args="-conf=${YashCoin_config} -datadir=${YashCoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+YashCoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${YashCoin_datadir}
+	[ $? -eq 0 ] && chown -R ${YashCoin_user}:${YashCoin_group} ${YashCoin_datadir}
+}
+
+YashCoin_prestart()
+{
+	if [ ! -d "${YashCoin_datadir}/." ]; then
+		YashCoin_create_datadir || return 1
+	fi
+}
+
+YashCoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+YashCoin_stop()
+{
+    YashCoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${YashCoin_config} -datadir=${YashCoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"
